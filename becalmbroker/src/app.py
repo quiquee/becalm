@@ -22,7 +22,7 @@ scheduler = APScheduler()
 @scheduler.task('interval', id='do_job_1', seconds=5, misfire_grace_time=10)
 def job1():
     with scheduler.app.app_context():
-        print "Gather measures"
+
         # Gather data from sensor microsercice
         r = requests.get(sensorurl + '/rest/api/v1.0/temperature')
 
@@ -54,11 +54,12 @@ def job1():
     payload = []
     payload.append(tempJ)
     payload.append(presJ)
+
     print json.dumps(payload) ;
+    headers = {'Content-type': 'application/json'}
+    r = requests.post('http://becalm.ngrok.io/data-sensor/2?id_device=1', headers=headers, json=payload) 
 
-    r = requests.post('http://becalm.ngrok.io/data-sensor/2?id_device=1', data=json.dumps(payload) )
-
-    if r.status_code == 200:
+    if r.status_code == 201:
         print "Posted to server"
     else:
         print "Error posting to server: " + str(r.status_code)
@@ -68,11 +69,26 @@ app = Flask(__name__)
 
 @app.route('/rest/api/v1.0/temperature', methods=['GET'])
 def temp():
+    r = requests.get(sensorurl + '/rest/api/v1.0/temperature')
+    if r.status_code == 200:
+        temperature=r.text
+        print temperature
+    else:
+        print "Error: " + str(r.status_code)
+
     return temperature
 
 @app.route('/rest/api/v1.0/pressure', methods=['GET'])
 def press():
-    return pressure
+    r = requests.get(sensorurl + '/rest/api/v1.0/pressure')
+
+    if r.status_code == 200:
+        pressure=r.text
+        print pressure
+    else:
+        print "Error: " + str(r.status_code)
+
+        return pressure
 
 @app.route('/rest/api/v1.0/debug', methods=['GET'])
 def home2():
