@@ -29,9 +29,9 @@ def get_val2():
 @app.route('/debug', methods=['GET'])
 def debug():
     max30100= dict()
-    max30100['heartbeat'] = sensor.read_heartbeat()
-    max30100['spo2'] = sensor.read_SpO2()
-    return json.dumps(max30100, ensure_ascii=False)
+    max30100['h'] = sensor.read_heartbeat()
+    max30100['o'] = sensor.read_SpO2()
+    return max30100
 
 if __name__ == '__main__':
     app.debug = True
