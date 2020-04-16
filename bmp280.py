@@ -36,7 +36,6 @@ def job1():
         pressurel=tmpPressure
     if pressureh==-1:
         pressureh=tmpPressure
-    print('This is job1')
 
     # Inspira
     if tmpPressure < (pressureh+pressurel)/2:
@@ -90,16 +89,24 @@ def get_val2():
 
 @app.route('/debug', methods=['GET'])
 def debug():
+    # ('t', 'Temperatura', '°C', 36, 40, 30, 50, 1),
+    # ('p', 'Presión aire máscara', 'Pa', 100700, 101400, 100500, 101500, 1),
+    # ('c', 'Concentración CO2 máscara', 'ppm', 110, 190, 100, 200, 0),
+    # ('h', 'Frecuencia cardíaca', 'latidos/min', 110, 190, 100, 200, 0),
+    # ('o', 'Sp02 - Saturación de oxígeno en sangre', '?', 110, 185, 100, 200, 0),
+    # ('a', 'Amplitud respiratoria', 'Pa', 110, 185, 100, 200, 0),
+    # ('b', 'Frecuencia respiratoria', 'respiraciones/minuto', 110, 185, 100, 200, 0),
+    # ('q', 'PEEP', 'Pa', 110, 185, 100, 200, 0);
     output = dict()
-    output['Temperatura'] = round(temperature,2)
-    output['Presión Actual'] = round(lpressure,2)
-    output['Amplitud Respiratoria'] = round(ra, 2)
-    output['Presión Expiración'] = round(pressureh,2)
-    output['Presión Inspiración'] = round(pressurel,2)
-    output['Respiraciones por Minuto'] = round(rr,2)
-    output['Última Respiración'] = str(lbreath)
-    output['Fase Respiratoria'] = tmpPhase
-    return json.dumps(output, ensure_ascii=False)
+    output['t'] = round(temperature,2)
+    output['p'] = round(lpressure,2)
+    output['a'] = round(ra, 2)
+    #   output['Presión Expiración'] = round(pressureh,2)
+    output['q'] = round(pressurel,2)
+    output['b'] = round(rr,2)
+    #    output['Última Respiración'] = str(lbreath)
+    #    output['Fase Respiratoria'] = tmpPhase
+    return(output)
 
 if __name__ == '__main__':
 

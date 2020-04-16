@@ -1,5 +1,0 @@
-pip install Flask flask-cors requests apscheduler
-pip install Flask flask_restful
-pip install Flask flask_scheduler
-pip install Flask flask_apscheduler
-
