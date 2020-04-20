@@ -3,7 +3,7 @@
     <img alt="Vue logo" class="center" src="./assets/logo.png" />
     <HelloWorld msg="Welcome to Becalm v0.1" />
     <Sensor type="BMP280" endpoint="http://becalm02:8888/debug" />
-    <Chart title="Startup" gl="startup" width="300" height="200" />
+    
     <!-- Sensor type="MAX30100" endpoint="http://becalm02:8887/debug" -->
   </div>
 </template>
@@ -11,7 +11,6 @@
 <script>
 import HelloWorld from "./components/HelloWorld.vue";
 import Sensor from "./components/Sensor.vue";
-import Chart from "./components/chart.vue";
 
 export default {
   name: "App",
@@ -28,7 +27,8 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: left;
-  color: #2c3e50;
+  acolor: #e0e0e0;
+  abackground: #2c3e50;
   margin-top: 10px;
 }
 .center {

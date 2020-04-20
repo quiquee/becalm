@@ -6,13 +6,10 @@
             <div v-on:click="track(item.measure)">{{item.measure}}: {{ item.value }} </div>
 
       </div>
-
     
   <CChartLine
-    style="height:300px" v-bind:datasets="cdata"    
-    :options="{ maintainAspectRatio: false,  
-                borderWidth: 10, 
-                backgroundColor: '#000000' }"
+    v-bind:datasets="cdata"    
+    v-bind:options="coptions"
   />
   </div>
 </template>
@@ -30,14 +27,53 @@ export default {
     return { 
       status: "",
       sensordata: {} ,
-      cdata: [{ data:[], label:"" }],
       chartlen: 250,
       trackmeasure: "Presión",
-      paused: 0
+      paused: 0,
+
+      cdata: [
+        { data:[], 
+          label:"BeCalm" ,
+          fill: true,    
+          pointRadius: 0,
+          tension: 0,
+          cubicInterpolationMode: 'middle', 
+          
+        },
+      ],
+      coptions: {
+        steppedLine: true  ,
+
+          borderJoinStyle: "round",
+        legend: {
+            labels: {
+                // This more specific font property overrides the global property
+                fontColor: 'black'
+            }
+        }
+        ,
+        scales: {
+            yAxes: [{
+              display: true,
+              drawTicks: false,
+                ticks: {
+                    beginAtZero: false,
+                    fontSize: 10,
+                    
+                }
+            }], 
+            xAxes: [{
+              display: false,
+              drawTicks: false,
+            }]
+        }
+      }
     };
   },
   mounted() {
+    Chart.defaults.global.defaultColor='rgba(255, 255, 250, 0)';
     this.updateStatus();
+
   },
   methods: {
     updateStatus: function() {
@@ -53,8 +89,7 @@ export default {
               if (this.cdata[0].data.length > this.chartlen ) {                 
                 this.cdata[0].data.shift() 
                 }
-              this.cdata[0].data.push(res.data[measure]) ;
-              
+              this.cdata[0].data.push(res.data[measure]) ;                            
             }
           }
           this.sensordata = measures ;
@@ -95,6 +130,10 @@ a {
 }
 .sensor {
   float: left;
+  acolor: #e0e0e0;
+  abackground: #2c3e50;
+  
+
 }
 .meassure{
   font-size: 14px;
