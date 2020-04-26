@@ -1,17 +1,19 @@
 <template>
-  <div class="sensor" v-on:click="paused ^= 1; updateStatus();" >
+<div>
+  <div class="sensor"  >
     Sensor type:{{ type }} Status:{{ status }} 
+    <img src="./assets/playpause.jpeg" width=20px v-on:click="paused ^= 1; updateStatus();"/>
       <p/>
        <div class="meassure" v-for="item in sensordata" :key="item.measure">
             <div v-on:click="track(item.measure)">{{item.measure}}: {{ item.value }} </div>
-
       </div>
-    
+  </div>
   <CChartLine
     v-bind:datasets="cdata"    
     v-bind:options="coptions"
+    
   />
-  </div>
+</div>
 </template>
 
 <script>
@@ -30,21 +32,24 @@ export default {
       chartlen: 250,
       trackmeasure: "Presión",
       paused: 0,
+      yWide: 0.01,
 
       cdata: [
         { data:[], 
-          label:"BeCalm" ,
+          label: '' ,
           fill: true,    
           pointRadius: 0,
           tension: 0,
           cubicInterpolationMode: 'middle', 
+          backgroundColor: "#FFA0A0",
           
         },
       ],
       coptions: {
         steppedLine: true  ,
-
-          borderJoinStyle: "round",
+        maintainAspectRatio: true,
+        responsive: true,
+        borderJoinStyle: "round",
         legend: {
             labels: {
                 // This more specific font property overrides the global property
@@ -54,13 +59,15 @@ export default {
         ,
         scales: {
             yAxes: [{
+              ticks: {
+                    suggestedMin: 0,
+                    suggestedMax: 0,
+                    beginAtZero: false,
+                    fontSize: 16,
+                },
               display: true,
               drawTicks: false,
-                ticks: {
-                    beginAtZero: false,
-                    fontSize: 10,
-                    
-                }
+                
             }], 
             xAxes: [{
               display: false,
@@ -70,8 +77,8 @@ export default {
       }
     };
   },
-  mounted() {
-    Chart.defaults.global.defaultColor='rgba(255, 255, 250, 0)';
+  mounted() {    
+    this.track(this.trackmeasure)
     this.updateStatus();
 
   },
@@ -85,10 +92,19 @@ export default {
             //console.log(measure) ;
             //console.log(res.data[measure]) ;
             measures.push( { 'measure': measure, 'value' : res.data[measure]} )
-            if (measure == this.trackmeasure ) {              
+            if (measure == this.trackmeasure ) { 
+              
+              // IF this is a reset or every 100 points
+              if (this.cdata[0].data.length % 100 == 0 ) {                 
+                this.coptions.scales.yAxes[0].ticks.suggestedMin= (1-this.yWide) * res.data[measure] ;
+                this.coptions.scales.yAxes[0].ticks.suggestedMax= (1+this.yWide) * res.data[measure] ;
+                console.log("Reset Scale") ;
+              }                           
+              
+              // Display only this.chartLen measues
               if (this.cdata[0].data.length > this.chartlen ) {                 
                 this.cdata[0].data.shift() 
-                }
+                } 
               this.cdata[0].data.push(res.data[measure]) ;                            
             }
           }
@@ -129,15 +145,15 @@ a {
   color: #42b983;
 }
 .sensor {
-  float: left;
   acolor: #e0e0e0;
   abackground: #2c3e50;
-  
-
 }
 .meassure{
-  font-size: 14px;
+  font-size: 18px;
   float:left;
   padding: 5px 5px 5px 5px;
+}
+img {
+  vertical-align: text-bottom;
 }
 </style>

@@ -42,32 +42,19 @@ def job1():
         # Cambiamos a Inspirar
         # podemos medir el ritmo respiratorio
         # y debemos guardar la amplitud respiratoria
-        if tmpPhase == 'E' :
-            rr=60 / ( datetime.now() - lbreath ).total_seconds()
-            lbreath=datetime.now()
-            ra=pressureh-pressurel
-
-        if tmpPressure < pressurel:
-            pressurel = tmpPressure
-
         tmpPhase="I"
+        pressurel = tmpPressure
 
     # Expira
     if tmpPressure > (pressureh+pressurel)/2:
         # Cambiamos a Expirar
         # podemos medir el ritmo respiratorio
-        if tmpPhase == 'I'  :
-            rr=60 / (datetime.now() - lbreath).total_seconds()
-            lbreath=datetime.now()
-            ra=pressureh-pressurel
-
-            pressureh = (pressureh+pressurel)/2
-
-        if tmpPressure > pressureh:
-            pressureh=tmpPressure
-
         tmpPhase="E"
-
+        pressureh=tmpPressure
+        
+        
+    rr=60 / (datetime.now() - lbreath).total_seconds()
+    ra=pressureh-pressurel            
     lpressure = tmpPressure
     lastmeasure = datetime.now()
 

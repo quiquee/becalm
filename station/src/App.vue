@@ -4,7 +4,6 @@
     <HelloWorld msg="Welcome to Becalm v0.1" />
     <Sensor type="BMP280" endpoint="http://becalm02:8888/debug" />
     
-    <!-- Sensor type="MAX30100" endpoint="http://becalm02:8887/debug" -->
   </div>
 </template>
 
