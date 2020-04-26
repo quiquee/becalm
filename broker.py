@@ -12,7 +12,7 @@ import requests
 import json
 from flask_apscheduler import APScheduler
 
-sensorurl="http://becalm02:8888"
+sensorurl="http://becalm02:8888/"
 sensorurl2="http://localhost:8887"
 
 scheduler = APScheduler()
@@ -23,7 +23,7 @@ def job1():
     with scheduler.app.app_context():
 
         # Gather data from sensor microsercice
-        r = requests.get(sensorurl + '/debug')
+        r = requests.get(sensorurl)
 
     if r.status_code != 200:
         print("Error reading sensor " + sensorurl)
@@ -46,7 +46,7 @@ def job1():
     r = requests.post('http://valora.io:8080/v100/data-sensor/2?id_device=1', headers=headers, json=payload) 
 
     if r.status_code == 201:
-        print ("Posted to server")
+        print ( datetime.now().__str__() + " Posted to server")
     else:
         print ("Error posting to server: " + str(r.status_code))
 
